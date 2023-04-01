@@ -20,8 +20,8 @@ public class InvestorController {
     public Investor createWithdrawal(@PathVariable Long id, @RequestBody Withdrawal withdrawal) {
         Investor investor = repository.findById(id)
                 .orElseThrow(); // TODO: Add Exceptions for no Investor matching the id
-        Product product = investor.getProductById(withdrawal.getProductId);
-        product.addWithdrawal(new Withdrawal(withdrawal.getAmount()));
+//        Product product = investor.getProductById(withdrawal.getProductId);
+//        product.addWithdrawal(new Withdrawal(withdrawal.getAmount()));
 
         Investor savedInvestor = repository.save(investor);
         return savedInvestor;

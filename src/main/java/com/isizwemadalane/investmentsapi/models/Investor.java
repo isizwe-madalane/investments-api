@@ -29,6 +29,10 @@ public class Investor {
         this.address = address;
     }
 
+//    public Product getProductById(Long id) {
+//
+//    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
