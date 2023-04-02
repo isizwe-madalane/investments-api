@@ -1,20 +1,27 @@
 package com.isizwemadalane.investmentsapi.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "WITHDRAWALS")
 public class Withdrawal {
 
     @Id
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Autowired
-    private Double amount;
 
+    @Column(name = "INVESTOR_ID")
+    private Long investorID;
+
+    @Column(name = "AMOUNT")
+    private Amount amount;
+
+    protected Withdrawal() { }
+    public Withdrawal(Long id, Amount amount) {
+        this.id = id;
+        this.amount = amount;
+    }
 
     public Long getId() {
         return id;
@@ -24,11 +31,19 @@ public class Withdrawal {
         this.id = id;
     }
 
-    public Double getAmount() {
+    public Long getInvestorID() {
+        return investorID;
+    }
+
+    public void setInvestorID(Long investorID) {
+        this.investorID = investorID;
+    }
+
+    public Amount getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(Amount amount) {
         this.amount = amount;
     }
 }
