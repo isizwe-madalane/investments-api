@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "product")
 public class Product {
@@ -15,10 +17,11 @@ public class Product {
     @Id
     @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "product_type")
-    private String productType;
+    @Enumerated(EnumType.STRING)
+    private ProductType productType;
 
     @Column(name = "product_name")
     private String productName;
@@ -34,27 +37,33 @@ public class Product {
     @JsonProperty("investor_id")
     private Investor investor;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "prod_withdraw", joinColumns = { @JoinColumn(name = "product_id", referencedColumnName = "product_id")}, inverseJoinColumns = { @JoinColumn(name = "withdrawal_id", referencedColumnName = "withdrawal_id")})
+    private Withdrawal withdrawal;
+
+
     public Product() { super(); }
-    public Product(String productType, String productName, Double productCurrentBalance, Investor investor) {
+    public Product(ProductType productType, String productName, Double productCurrentBalance, Investor investor, Withdrawal withdrawal) {
         this.productType = productType;
         this.productName = productName;
         this.productCurrentBalance = productCurrentBalance;
         this.investor = investor;
+        this.withdrawal = withdrawal;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getProductType() {
+    public ProductType getProductType() {
         return productType;
     }
 
-    public void setProductType(String productType) {
+    public void setProductType(ProductType productType) {
         this.productType = productType;
     }
 
@@ -80,5 +89,13 @@ public class Product {
 
     public void setInvestor(Investor investor) {
         this.investor = investor;
+    }
+
+    public Withdrawal getWithdrawal() {
+        return withdrawal;
+    }
+
+    public void setWithdrawal(Withdrawal withdrawal) {
+        this.withdrawal = withdrawal;
     }
 }
