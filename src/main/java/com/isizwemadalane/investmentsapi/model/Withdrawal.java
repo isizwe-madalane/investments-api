@@ -1,9 +1,15 @@
 package com.isizwemadalane.investmentsapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "withdrawal")
+@Table(name = "withdrawals")
 public class Withdrawal {
 
     @Id
@@ -15,15 +21,19 @@ public class Withdrawal {
     private Double withdrawalAmount;
 
     @Column(name = "withdrawal_status")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private WithdrawalStatus withdrawalStatus;
 
-    @OneToOne(mappedBy = "withdrawal")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
+    @JsonProperty("product_id")
     private Product product;
 
-    public Withdrawal() {}
+    public Withdrawal() { super(); }
     public Withdrawal(Double withdrawalAmount, WithdrawalStatus withdrawalStatus, Product product) {
-        super();
         this.withdrawalAmount = withdrawalAmount;
         this.withdrawalStatus = withdrawalStatus;
         this.product = product;

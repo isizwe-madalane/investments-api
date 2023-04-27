@@ -3,7 +3,7 @@ CREATE DATABASE "investorsDB";
 
 DROP TABLE investor IF EXISTS;
 DROP TABLE product IF EXISTS;
-DROP TABLE withdrawal IF EXISTS;
+DROP TABLE withdrawals IF EXISTS;
 
 CREATE TABLE investor (
     id INTEGER IDENTITY PRIMARY KEY,
@@ -27,7 +27,7 @@ CREATE TABLE product (
     FOREIGN KEY (investor_id) REFERENCES investor (investor_id)
 );
 
-CREATE TABLE withdrawal (
+CREATE TABLE withdrawals (
     id INTEGER IDENTITY PRIMARY KEY,
     withdrawal_id INTEGER,
     withdrawal_status VARCHAR(20),
@@ -36,4 +36,4 @@ CREATE TABLE withdrawal (
 );
 
 ALTER TABLE product ADD CONSTRAINT fk_products FOREIGN KEY (investor_id) references investor(investor_id) ON DELETE CASCADE;
-ALTER TABLE withdrawal ADD CONSTRAINT fk_withdrawals FOREIGN KEY (product_id) references product(product_id) ON DELETE CASCADE;
+ALTER TABLE withdrawals ADD CONSTRAINT fk_withdrawals FOREIGN KEY (product_id) references product(product_id) ON DELETE CASCADE;

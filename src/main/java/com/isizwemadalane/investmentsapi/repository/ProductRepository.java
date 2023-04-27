@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-
     Page<Product> findByInvestorId(Long investorId, Pageable pageable);
     Optional<Product> findByIdAndInvestorId(Long id, Long investorId);
 }

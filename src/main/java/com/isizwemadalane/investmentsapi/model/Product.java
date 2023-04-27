@@ -37,18 +37,20 @@ public class Product {
     @JsonProperty("investor_id")
     private Investor investor;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinTable(name = "prod_withdraw", joinColumns = { @JoinColumn(name = "product_id", referencedColumnName = "product_id")}, inverseJoinColumns = { @JoinColumn(name = "withdrawal_id", referencedColumnName = "withdrawal_id")})
-    private Withdrawal withdrawal;
+//    @OneToOne
+//    @JoinColumn(name = "withdrawal_id")
+//    private Withdrawal withdrawal;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<Withdrawal> withdrawals;
 
     public Product() { super(); }
-    public Product(ProductType productType, String productName, Double productCurrentBalance, Investor investor, Withdrawal withdrawal) {
+    public Product(ProductType productType, String productName, Double productCurrentBalance, Investor investor, Set<Withdrawal> withdrawals) {
         this.productType = productType;
         this.productName = productName;
         this.productCurrentBalance = productCurrentBalance;
         this.investor = investor;
-        this.withdrawal = withdrawal;
+        this.withdrawals = withdrawals;
     }
 
     public Long getId() {
@@ -91,11 +93,11 @@ public class Product {
         this.investor = investor;
     }
 
-    public Withdrawal getWithdrawal() {
-        return withdrawal;
+    public Set<Withdrawal> getWithdrawals() {
+        return withdrawals;
     }
 
-    public void setWithdrawal(Withdrawal withdrawal) {
-        this.withdrawal = withdrawal;
+    public void setWithdrawals(Set<Withdrawal> withdrawals) {
+        this.withdrawals = withdrawals;
     }
 }
