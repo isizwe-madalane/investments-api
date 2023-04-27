@@ -10,7 +10,7 @@ public class Investor {
 
     @Id
     @Column(name = "investor_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "investor_name")

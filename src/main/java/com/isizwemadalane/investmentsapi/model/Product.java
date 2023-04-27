@@ -8,15 +8,13 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.Set;
-
 @Entity
 @Table(name = "product")
 public class Product {
 
     @Id
     @Column(name = "product_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "product_type")
@@ -37,20 +35,16 @@ public class Product {
     @JsonProperty("investor_id")
     private Investor investor;
 
-//    @OneToOne
-//    @JoinColumn(name = "withdrawal_id")
-//    private Withdrawal withdrawal;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<Withdrawal> withdrawals;
+    @OneToOne(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Withdrawal withdrawal;
 
     public Product() { super(); }
-    public Product(ProductType productType, String productName, Double productCurrentBalance, Investor investor, Set<Withdrawal> withdrawals) {
+    public Product(ProductType productType, String productName, Double productCurrentBalance, Investor investor, Withdrawal withdrawal) {
         this.productType = productType;
         this.productName = productName;
         this.productCurrentBalance = productCurrentBalance;
         this.investor = investor;
-        this.withdrawals = withdrawals;
+        this.withdrawal = withdrawal;
     }
 
     public Long getId() {
@@ -93,11 +87,11 @@ public class Product {
         this.investor = investor;
     }
 
-    public Set<Withdrawal> getWithdrawals() {
-        return withdrawals;
+    public Withdrawal getWithdrawal() {
+        return withdrawal;
     }
 
-    public void setWithdrawals(Set<Withdrawal> withdrawals) {
-        this.withdrawals = withdrawals;
+    public void setWithdrawal(Withdrawal withdrawal) {
+        this.withdrawal = withdrawal;
     }
 }

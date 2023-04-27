@@ -14,7 +14,7 @@ public class Withdrawal {
 
     @Id
     @Column(name = "withdrawal_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "withdrawal_amount")
@@ -24,7 +24,7 @@ public class Withdrawal {
     @Enumerated(EnumType.STRING)
     private WithdrawalStatus withdrawalStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
