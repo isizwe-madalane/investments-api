@@ -4,6 +4,7 @@ import com.isizwemadalane.investmentsapi.exception.ResourceNotFoundException;
 import com.isizwemadalane.investmentsapi.model.*;
 import com.isizwemadalane.investmentsapi.repository.InvestorRepository;
 import com.isizwemadalane.investmentsapi.repository.ProductRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,11 +25,14 @@ public class ProductController {
     @Autowired
     private InvestorRepository investorRepository;
 
+
+    @Operation(summary = "Gets all available products of a single investor")
     @GetMapping("/investors/{investorId}/products")
     public Page<Product> getAllProductsByInvestorId(@PathVariable (value = "investorId") Long investorId, Pageable pageable) {
         return productRepository.findByInvestorId(investorId, pageable);
     }
 
+    @Operation(summary = "Gets a single product of an investor using the investorId and productId")
     @GetMapping("/investors/{investorId}/products/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable (value = "investorId") Long investorId, @PathVariable (value = "productId") Long productId) {
         Product product = productRepository.findByIdAndInvestorId(productId, investorId)
@@ -36,6 +40,7 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
+    @Operation(summary = "Adds a single product to the investors products")
     @PostMapping("/investors/{investorId}/products")
     public Product addProduct(@PathVariable (value = "investorId") Long investorId, @RequestBody Product product) {
         Investor investor = investorRepository.findById(investorId)
@@ -44,6 +49,7 @@ public class ProductController {
         return productRepository.save(product);
     }
 
+    @Operation(summary = "Deletes a single products using the productId")
     @DeleteMapping("/investors/{investorId}/products/{productId}")
     public ResponseEntity<?> removeProduct(@PathVariable (value = "investorId") Long investorId, @PathVariable (value = "productId") Long productId) {
         Product product = productRepository.findByIdAndInvestorId(productId, investorId)

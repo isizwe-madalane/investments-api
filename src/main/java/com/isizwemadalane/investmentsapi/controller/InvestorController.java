@@ -3,6 +3,7 @@ package com.isizwemadalane.investmentsapi.controller;
 import com.isizwemadalane.investmentsapi.exception.ResourceNotFoundException;
 import com.isizwemadalane.investmentsapi.model.Investor;
 import com.isizwemadalane.investmentsapi.repository.InvestorRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +20,20 @@ public class InvestorController {
     @Autowired
     private InvestorRepository investorRepository;
 
+
+    @Operation(summary = "Gets the list of all investors in the DB")
     @GetMapping("/investors")
     public List<Investor> getAllInvestors() {
         return investorRepository.findAll();
     }
 
+    @Operation(summary = "Adds an investor to the DB")
     @PostMapping("/investors")
     public Investor createInvestor(@RequestBody Investor investor) {
         return investorRepository.save(investor);
     }
 
+    @Operation(summary = "Gets a single investor by the id")
     @GetMapping("/investors/{id}")
     public ResponseEntity<Investor> getInvestorById(@PathVariable Long id) {
         Investor investor = investorRepository.findById(id)
@@ -36,6 +41,7 @@ public class InvestorController {
         return ResponseEntity.ok(investor);
     }
 
+    @Operation(summary = "Updates the details of an investor")
     @PutMapping("/investors/{id}")
     public ResponseEntity<Investor> updateInvestor(@PathVariable Long id, @RequestBody Investor investorDetails) {
         Investor investor = investorRepository.findById(id)
@@ -53,6 +59,7 @@ public class InvestorController {
         return ResponseEntity.ok(updatedInvestor);
     }
 
+    @Operation(summary = "Deletes an investor using the id")
     @DeleteMapping("/investors/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteInvestor(@PathVariable Long id) {
         Investor investor = investorRepository.findById(id)

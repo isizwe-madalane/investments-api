@@ -5,9 +5,8 @@ import com.isizwemadalane.investmentsapi.model.*;
 import com.isizwemadalane.investmentsapi.repository.InvestorRepository;
 import com.isizwemadalane.investmentsapi.repository.ProductRepository;
 import com.isizwemadalane.investmentsapi.repository.WithdrawalRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,11 +24,10 @@ public class WithdrawalController {
     @Autowired
     private ProductRepository productRepository;
 
-    @GetMapping("/investors/{investorId}/products/{productId}/withdraw")
-    public Page<Withdrawal> getAllWithdrawalsByProductId(@PathVariable (value = "productId") Long productId, Pageable pageable) {
-        return withdrawalRepository.findByProductId(productId, pageable);
-    }
+    @Autowired
+    private InvestorRepository investorRepository;
 
+    @Operation(summary = "This creates a new withdrawal for a selected product, only requires the withdrawalAmount")
     @PostMapping("/investors/{investorId}/products/{productId}/withdraw")
     public Withdrawal addWithdrawal(@PathVariable(value = "investorId") Long investorId, @PathVariable (value = "productId") Long productId, @RequestBody Withdrawal withdrawal) {
         Product product = productRepository.findByIdAndInvestorId(productId, investorId)
@@ -39,10 +37,7 @@ public class WithdrawalController {
         return withdrawalRepository.save(withdrawal);
     }
 
-
-    @Autowired
-    private InvestorRepository investorRepository;
-
+    @Operation(summary = "This begins the withdrawal process, and creates a new withdrawal item")
     @PutMapping("/investors/{investorId}/products/{productId}/withdraw")
     public ResponseEntity<Product> initiateWithdrawal(@PathVariable(value = "investorId") Long investorId, @PathVariable(value = "productId") Long productId) {
         Investor investor = investorRepository.findById(investorId)
@@ -60,10 +55,7 @@ public class WithdrawalController {
     }
 
     // TODO: Add security with roles to access the endpoints and make changes
-    // TODO: Validate the withdrawal amount, investor age and validation errors
     // TODO: Add security for the API
-    // TODO: Add documentation for the API
-    // TODO: Create a new Withdraw for a single product
     private static Double validate(Investor investor, Product product) {
         // Check Age
         LocalDate currentDate = LocalDate.now();
